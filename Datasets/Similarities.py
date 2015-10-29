@@ -16,7 +16,7 @@ def euc_dist (ratings1_list, ratings2_list):
     n_items = len(shared_items)
     if (n_items == 0): return 0
     
-    sum_of_squares =sum([pow(vote[0], vote[1],2) for vote in shared_items])
+    sum_of_squares =sum([pow(vote[0]-vote[1],2) for vote in shared_items])
     return 1.0 / float( 1 + sqrt(sum_of_squares))
 
 #list1: [(item1,int rating1)...(itemN,ratingN)] of user1
