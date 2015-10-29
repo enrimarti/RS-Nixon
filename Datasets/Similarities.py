@@ -48,6 +48,31 @@ def sim_pearson(ratings1,ratings2):
     return num/den
 
 
+#list1: [(item1,int rating1)...(itemN,ratingN)] of user1
+#list2: [(item1,int ratingM)...(itemN,ratingM)] of user2
+#returns cosine similarity between user1 and user2
+def square_rooted(x):
+    return sqrt(sum([a*a for a in x]))
+
+def cosine_similarity(ratings1,ratings2):
+    
+    def square_rooted(x):
+    return sqrt(sum([a*a for a in x]))
+    
+    ratings_common=[]
+    for rate1 in ratings1:
+        for rate2 in ratings2:
+            if (rate1[0]==rate2[0]):
+                ratings_common.append([rate1[1],rate2[1]])
+
+    n=len(ratings_common)
+    if (n==0):
+        return 0
+    
+    numerator = sum([vote[0]*vote[1] for vote in ratings_common])
+    denominator = square_rooted([vote[0] for vote in ratings_common])*square_rooted([vote[1] for vote in ratings_common])
+    return round(numerator/float(denominator),3)
+
 
 def euc_dist2 (ratings1_list, ratings2_list):
     shared_items=[]
