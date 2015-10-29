@@ -49,4 +49,17 @@ def sim_pearson(ratings1,ratings2):
 
 
 
+def euc_dist2 (ratings1_list, ratings2_list):
+    shared_items=[]
+    for item1 in ratings1_list:
+        for item2 in ratings2_list:
+            if (item1[0] == item2[0]):
+                shared_items.append([item1[1], item2[1]])
+    
+    n_items = len(shared_items)
+    if (n_items == 0): return 0
+    
+    sum_of_squares =sum([pow(vote[0]-vote[1],2) for vote in shared_items])
+    return sqrt(n_items) / float(sqrt(n_items) + sqrt(sum_of_squares))
+
 
