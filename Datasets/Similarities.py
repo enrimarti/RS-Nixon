@@ -35,16 +35,18 @@ def sim_pearson(ratings1,ratings2):
     
     sum1=float(sum([rate[0] for rate in ratings_common]))
     sum2=float(sum([rate[1] for rate in ratings_common]))
+
     
     sum1sq=float(sum([pow(rate[0],2) for rate in ratings_common]))
     sum2sq=float(sum([pow(rate[1],2) for rate in ratings_common]))
-    
+
     pSum=float(sum([rate[0]*rate[1] for rate in ratings_common]))
     
     num=pSum-(sum1*sum2/n)
+
     den=sqrt((sum1sq-pow(sum1,2)/n)*(sum2sq-pow(sum2,2)/n))
     if den==0: return 0
-    
+
     return num/den
 
 
@@ -57,7 +59,7 @@ def square_rooted(x):
 def cosine_similarity(ratings1,ratings2):
     
     def square_rooted(x):
-    return sqrt(sum([a*a for a in x]))
+        return sqrt(sum([a*a for a in x]))
     
     ratings_common=[]
     for rate1 in ratings1:
@@ -71,7 +73,7 @@ def cosine_similarity(ratings1,ratings2):
     
     numerator = sum([vote[0]*vote[1] for vote in ratings_common])
     denominator = square_rooted([vote[0] for vote in ratings_common])*square_rooted([vote[1] for vote in ratings_common])
-    return round(numerator/float(denominator),3)
+    return round(numerator/float(denominator),4)
 
 
 def euc_dist2 (ratings1_list, ratings2_list):
