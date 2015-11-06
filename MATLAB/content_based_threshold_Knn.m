@@ -16,21 +16,44 @@ num2=icm2*icm';
 den1=norm1*norm';
 den2=norm2*norm';
 
+
 sim1=num1./den1;
 sim2=num2./den2;
+
+
+diff=speye(37142,37142);
+diff1=diff(1:18570,1:end);
+diff2=diff(18571:end,1:end);
+
+sim1=sim1-diff1;
+sim2=sim2-diff2;
+
+clearvars num1 num2 den1 den2 icm icm1 icm2;
 
 %remove NaN
 sim1(isnan(sim1))=0;
 sim2(isnan(sim2))=0;
 
-%%filtering by threshold j
-j=0.6;
 
-sim1=threshold(sim1,j);
-sim2=threshold(sim2,j);
+
+%%filtering by threshold j
+j=0.35;
+
+sim11=sim1(1:9285,:);
+sim12=sim1(9286:end,:);
+sim21=sim2(1:9286,:);
+sim22=sim2(9287:end,:);
+
+sim11=threshold(sim11,j);
+sim12=threshold(sim12,j);
+sim21=threshold(sim21,j);
+sim22=threshold(sim22,j);
+
+sim1=[sim11;sim12];
+sim2=[sim21;sim22];
 
 %%applying k-NN
-k=10;
+k=40;
 
 sim1=k_most_rel(sim1,k);
 sim2=k_most_rel(sim2,k);
@@ -51,6 +74,7 @@ sim2=k_most_rel(sim2,k);
 num_rec1=urm*sim1';
 num_rec2=urm*sim2';
 
+
 bin_urm=urm;
 bin_urm(bin_urm>0)=1;
 
@@ -59,6 +83,8 @@ den_rec2=bin_urm*sim2';
 
 tot1=num_rec1./den_rec1;
 tot2=num_rec2./den_rec2;
+
+clearvars den_rec1 den_rec2 num_rec1 num_rec2;
 
 %avoid to recommend already seen movies and sort the element
 not_bin_urm=not(bin_urm);
@@ -89,11 +115,8 @@ test_tot2=tot2(test2,:);
 test_tot=[test_tot1;test_tot2];
 test_tot(isnan(test_tot))=0;
 
-%save('test_tot.m','test_tot','-v7.3');
-%test_tot_copy=test_tot;
-
 %%%%%%% build the submission
-fileID = fopen('sub_content_based_norm.csv','w');
+fileID = fopen('sub_content_based_J35_K40.csv','w');
 for i = 1:4196
     row=test_tot(i,:);
     [sortedValues,sortIndex]=sort(row,'descend');

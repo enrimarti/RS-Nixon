@@ -1,5 +1,5 @@
-function [sim] = treshold (sim, j)
-    sim(sim<j)=0;
+function [cacca] = threshold (cacca, j)
+    cacca(cacca<j)=0;
 
 end
 
