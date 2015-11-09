@@ -1,25 +1,23 @@
-%load data
 [urm,test_users]=load_data('train_no_header.csv','test_no_header.csv',0);
-[icm,~]=load_data('icm_no_header.csv','test_no_header.csv',0);
 
+%Computing similarity matrix
+irm=urm';
 
-icm1=icm(1:18570,1:end);
-icm2=icm(18571:end,1:end);
+irm1=irm(1:18570,1:end);
+irm2=irm(18571:end,1:end);
 
-norm=sqrt(sum(icm .^ 2,2));
-norm1=sqrt(sum(icm1 .^ 2,2));
-norm2=sqrt(sum(icm2 .^ 2,2));
+norm=sqrt(sum(irm .^ 2,2));
+norm1=sqrt(sum(irm1 .^ 2,2));
+norm2=sqrt(sum(irm2 .^ 2,2));
 
-num1=icm1*icm';
-num2=icm2*icm';
+num1=irm1*irm';
+num2=irm2*irm';
 
 den1=norm1*norm';
 den2=norm2*norm';
 
-
 sim1=num1./den1;
 sim2=num2./den2;
-
 
 diff=speye(37142,37142);
 diff1=diff(1:18570,1:end);
@@ -28,7 +26,7 @@ diff2=diff(18571:end,1:end);
 sim1=sim1-diff1;
 sim2=sim2-diff2;
 
-clearvars num1 num2 den1 den2 icm icm1 icm2;
+clearvars num1 num2 den1 den2 irm irm1 irm2 diff1 diff2;
 
 %remove NaN
 sim1(isnan(sim1))=0;
@@ -37,12 +35,12 @@ sim2(isnan(sim2))=0;
 
 
 %%filtering by threshold j
-j=0.35;
-
 sim11=sim1(1:9285,:);
 sim12=sim1(9286:end,:);
 sim21=sim2(1:9286,:);
 sim22=sim2(9287:end,:);
+
+j=0.40;
 
 sim11=threshold(sim11,j);
 sim12=threshold(sim12,j);
@@ -53,7 +51,7 @@ sim1=[sim11;sim12];
 sim2=[sim21;sim22];
 
 %%applying k-NN
-k=40;
+k=10;
 
 sim1=k_most_rel(sim1,k);
 sim2=k_most_rel(sim2,k);
@@ -116,13 +114,18 @@ test_tot=[test_tot1;test_tot2];
 test_tot(isnan(test_tot))=0;
 
 %%%%%%% build the submission
-fileID = fopen('sub_content_based_J35_K40.csv','w');
+fileID = fopen('sub_item_based_J40_K10.csv','w');
+fprintf(fileID,'userId, testItems\n');
+valueFileID = fopen('values_sub_item _based_J40_K10.csv','w');
+fprintf(valueFileID,'userId,testValues\n');
 for i = 1:4196
     row=test_tot(i,:);
     [sortedValues,sortIndex]=sort(row,'descend');
     user=test_users(i);
     indexes=sortIndex(1:5);
+    values=full(sortedValues(1:5));
     fprintf(fileID,'%d, %d %d %d %d %d\n',user,indexes);
-
+    fprintf(valueFileID,'%f, %f, %f, %f, %f, %f\n',user,values);
 end
 fclose(fileID);
+fclose(valueFileID);
