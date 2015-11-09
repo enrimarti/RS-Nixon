@@ -10,11 +10,38 @@ norm=sqrt(sum(irm .^ 2,2));
 norm1=sqrt(sum(irm1 .^ 2,2));
 norm2=sqrt(sum(irm2 .^ 2,2));
 
-num1=irm1*irm';
-num2=irm2*irm';
+%%old num and den
 
-den1=norm1*norm';
-den2=norm2*norm';
+%num1=irm1*irm';
+%num2=irm2*irm';
+
+%den1=norm1*norm';
+%den2=norm2*norm';
+
+%%%%%%% Removing average from similarity definition
+irm_mask= logical(irm);
+
+
+avg1=repmat(avg(irm1,2),[size(irm,1),1]);
+diff_avg1=irm-avg1;
+avg1_num=diff_avg1.*irm_mask;
+num1=avg1_num*avg1_num';
+
+avg2=repmat(avg(irm2,2),[size(irm,1),1]);
+diff_avg2=irm-avg2;
+avg2_num=diff_avg2.*irm_mask;
+num2=avg2_num*avg_num';
+
+diff_avg1_sq=diff_avg1.*diff_avg1;
+avg1_den=diff_avg1_sq*irm_mask;
+den1=sqrt(avg1_den*avg1_den'); 
+
+diff_avg2_sq=diff_avg2.*diff_avg2;
+avg2_den=diff_avg2_sq*irm_mask;
+den2=sqrt(avg2_den*avg2_den'); 
+
+%%%%%%%
+
 
 sim1=num1./den1;
 sim2=num2./den2;
