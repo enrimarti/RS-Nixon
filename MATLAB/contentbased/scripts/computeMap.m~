@@ -1,0 +1,19 @@
+function[value] = computeMap (submission,groundTruth)
+subID=fopen(submission,'r');
+groID=fopen(groundTruth,'r');
+sub = textscan(subID,'%d, %d %d %d %d %d');
+gro = textscan(groID,'%d, %d %d %d %d %d');
+
+sub(1,:)
+value=0;
+for i=1:size(sub,1)
+    rec=sub(i,2:end);
+    truth=gro(i,2:end);
+    value=value+mapAt5(rec,truth);
+end
+value=value/size(sub,1);
+
+
+
+
+

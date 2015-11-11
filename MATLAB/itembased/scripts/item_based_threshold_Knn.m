@@ -6,9 +6,9 @@ irm=urm';
 irm1=irm(1:18570,1:end);
 irm2=irm(18571:end,1:end);
 
-norm=sqrt(sum(irm .^ 2,2));
-norm1=sqrt(sum(irm1 .^ 2,2));
-norm2=sqrt(sum(irm2 .^ 2,2));
+%norm=sqrt(sum(irm .^ 2,2));
+%norm1=sqrt(sum(irm1 .^ 2,2));
+%norm2=sqrt(sum(irm2 .^ 2,2));
 
 %%old num and den
 
@@ -19,26 +19,37 @@ norm2=sqrt(sum(irm2 .^ 2,2));
 %den2=norm2*norm';
 
 %%%%%%% Removing average from similarity definition
-irm_mask= logical(irm);
+
+irm_mask1= logical(irm1);
+irm_mask2= logical(irm2);
+
+avg=mean(irm,1);
 
 
-avg1=repmat(avg(irm1,2),[size(irm,1),1]);
-diff_avg1=irm-avg1;
-avg1_num=diff_avg1.*irm_mask;
-num1=avg1_num*avg1_num';
+diff_avg1=bsxfun(@minus,irm1,avg);
+avg1_num=diff_avg1.*irm_mask1;
 
-avg2=repmat(avg(irm2,2),[size(irm,1),1]);
-diff_avg2=irm-avg2;
-avg2_num=diff_avg2.*irm_mask;
+
+diff_avg2=bsxfun(@minus,irm2,avg);
+avg2_num=diff_avg2.*irm_mask2;
+
+avg_num=[avg1_num;avg2_num];
+num1=avg1_num*avg_num';
 num2=avg2_num*avg_num';
 
 diff_avg1_sq=diff_avg1.*diff_avg1;
-avg1_den=diff_avg1_sq*irm_mask;
-den1=sqrt(avg1_den*avg1_den'); 
+avg1_den=diff_avg1_sq.*irm_mask1;
+norm1=sum(avg1_den,2);
 
 diff_avg2_sq=diff_avg2.*diff_avg2;
-avg2_den=diff_avg2_sq*irm_mask;
-den2=sqrt(avg2_den*avg2_den'); 
+avg2_den=diff_avg2_sq.*irm_mask2;
+norm2=sum(avg2_den,2);
+
+norm=[norm1; norm2];
+
+avg_den=[avg1_den;avg2_den];
+den1=sqrt(norm1*norm');
+den2=sqrt(norm2*norm');
 
 %%%%%%%
 
@@ -67,7 +78,7 @@ sim12=sim1(9286:end,:);
 sim21=sim2(1:9286,:);
 sim22=sim2(9287:end,:);
 
-j=0.40;
+j=0.2;
 
 sim11=threshold(sim11,j);
 sim12=threshold(sim12,j);
@@ -78,7 +89,7 @@ sim1=[sim11;sim12];
 sim2=[sim21;sim22];
 
 %%applying k-NN
-k=10;
+k=200;
 
 sim1=k_most_rel(sim1,k);
 sim2=k_most_rel(sim2,k);
@@ -141,9 +152,9 @@ test_tot=[test_tot1;test_tot2];
 test_tot(isnan(test_tot))=0;
 
 %%%%%%% build the submission
-fileID = fopen('sub_item_based_J40_K10.csv','w');
+fileID = fopen('sub_item_based_norm_J20_K200.csv','w');
 fprintf(fileID,'userId, testItems\n');
-valueFileID = fopen('values_sub_item _based_J40_K10.csv','w');
+valueFileID = fopen('values_sub_item _based_norm_J20_K200.csv','w');
 fprintf(valueFileID,'userId,testValues\n');
 for i = 1:4196
     row=test_tot(i,:);

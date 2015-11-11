@@ -119,7 +119,7 @@ test_tot(isnan(test_tot))=0;
 
 %%%%%%% build the submission
 fileID = fopen('sub_content_based_J45_K20.csv','w');
-fprintf(fileID,'userId, testItems\n');
+fprintf(fileID,'userId,testItems\n');
 valueFileID = fopen('values_sub_content_based_J45_K20.csv','w');
 fprintf(valueFileID,'userId, testValues\n');
 for i = 1:4196
