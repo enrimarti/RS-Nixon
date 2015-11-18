@@ -1,0 +1,4 @@
+function sg =compute_sg(matrix)
+
+k=50
+
