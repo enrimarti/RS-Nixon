@@ -54,7 +54,7 @@ sim2=[sim21;sim22];
 %sim=[sim1;sim2];
 
 %%applying k-NN
-k=30;
+k=25;
 
 sim1=k_most_rel(sim1,k);
 sim2=k_most_rel(sim2,k);
@@ -102,7 +102,7 @@ test_tot1=tot1(test1,:);
 test_tot2=tot2(test2,:);
 test_tot=[test_tot1;test_tot2];
 
-filename='sub_content_based_J40_K30_S5.csv';
+filename='sub_content_based_J53_K25_S5.csv';
 path='../outputs/';
 %filename=strcat(path,filename);
 

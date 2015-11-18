@@ -4,9 +4,9 @@ clearvars;
 [urm,test_users]=load_data('train_no_header.csv','test_no_header.csv',0);
 [icm,~]=load_data('icm_no_header.csv','test_no_header.csv',0);
 
-%urm=[9 0 0 8 7;9 0 7 1 0;5 4 6 0 9];
-%icm=[1 0 0 1 0;1 1 1 1 0; 0 0 0 0 1; 1 0 1 0 1; 0 0 0 0 0];
-%test_users=[1 2 3];
+% urm=[9 0 0 8 7;9 0 7 1 0;5 4 6 0 9];
+% icm=[1 0 0 1 0;1 1 1 1 0; 0 0 0 0 1; 1 0 1 0 1; 0 0 0 0 0];
+% test_users=[1 2 3];
 
 [icm1 icm2]=split_row(icm);
 
@@ -42,7 +42,7 @@ sim2(isnan(sim2))=0;
 [sim11 sim12]=split_row(sim1);
 [sim21 sim22]=split_row(sim2);
 
-j=0.53;
+j=0.4;
 
 sim11=threshold(sim11,j);
 sim12=threshold(sim12,j);
@@ -51,24 +51,30 @@ sim22=threshold(sim22,j);
 
 sim1=[sim11;sim12];
 sim2=[sim21;sim22];
-%sim=[sim1;sim2];
+
 
 %%applying k-NN
-k=30;
+k=50;
 
 sim1=k_most_rel(sim1,k);
 sim2=k_most_rel(sim2,k);
 
-num_rec1=urm*sim1';
-num_rec2=urm*sim2';
+[sim11 sim12]=split_column(sim1);
+[sim21 sim22]=split_column(sim2);
+sim1=[sim11;sim21];
+sim2=[sim12;sim22];
+
+num_rec1=urm*sim1;
+num_rec2=urm*sim2;
 
 bin_urm=logical(urm);
 
-den_rec1=bin_urm*sim1';
-den_rec2=bin_urm*sim2';
+den_rec1=bin_urm*sim1;
+den_rec2=bin_urm*sim2;
+
 
 %%%%shrink term
-shrink=5;
+shrink=0;
 
 tot1=num_rec1./(den_rec1+shrink);
 tot2=num_rec2./(den_rec2+shrink);
@@ -102,7 +108,7 @@ test_tot1=tot1(test1,:);
 test_tot2=tot2(test2,:);
 test_tot=[test_tot1;test_tot2];
 
-filename='sub_content_based_J40_K30_S5.csv';
+filename='prova_J40_K50.csv';
 path='../outputs/';
 %filename=strcat(path,filename);
 

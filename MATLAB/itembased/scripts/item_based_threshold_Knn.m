@@ -16,7 +16,6 @@ avg=mean(irm,1);
 diff_avg1=bsxfun(@minus,irm1,avg);
 avg1_num=diff_avg1.*irm_mask1;
 
-
 diff_avg2=bsxfun(@minus,irm2,avg);
 avg2_num=diff_avg2.*irm_mask2;
 

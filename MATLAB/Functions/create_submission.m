@@ -7,10 +7,10 @@ function create_submission (filename, recommendations, test_users)
 %%creates two files: the first one is the submission, the second one is a
 %%values file.
 fileID = fopen(filename,'w');
-fprintf(fileID,'userId,testItems');
+fprintf(fileID,'userId,testItems\n');
 valueFileID = fopen(strcat('values_',filename),'w');
 fprintf(valueFileID,'userId,testValues\n');
-for i = 1:4196
+for i = 1:size(test_users,1)
     row=recommendations(i,:);
     [sortedValues,sortIndex]=sort(row,'descend');
     user=test_users(i);
