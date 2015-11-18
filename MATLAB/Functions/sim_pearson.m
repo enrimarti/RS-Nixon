@@ -26,4 +26,7 @@ den2=sqrt(den2.*den2_trans)+shrink;
 sim1=num1./den1;
 sim2=num2./den2;
 
+sim1(isnan(sim1))=0;
+sim2(isnan(sim2))=0;
+
 
