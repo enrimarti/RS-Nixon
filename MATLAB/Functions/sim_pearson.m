@@ -1,4 +1,4 @@
-function[sim1,sim2]=sim_pearson(urm)
+function[sim1,sim2]=sim_pearson(urm,shrink)
 irm=[9 0 8 7;8 0 5 4;9 8 6 0;1 2 0 10];
 urm=irm';
 
@@ -22,8 +22,8 @@ den2_temp=den2';
 den1_trans=[den11_temp den12_temp];
 den2_trans=[den21_temp den22_temp];
 
-den1=sqrt(den1.*den1_trans);
-den2=sqrt(den2.*den2_trans);
+den1=sqrt(den1.*den1_trans)+shrink;
+den2=sqrt(den2.*den2_trans)+shrink;
 
 sim1=num1./den1;
 sim2=num2./den2;
