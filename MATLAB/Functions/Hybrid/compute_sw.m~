@@ -1,0 +1,7 @@
+function sw = compute_sw (matrix)
+max=2;
+matrix2=matrix;
+matrix2(matrix2>=50)=0;
+matrix3=matrix2*max/50; 
+matrix3(matrix==0) = max
+
