@@ -1,6 +1,4 @@
 function[sim1,sim2]=sim_pearson(urm,shrink)
-irm=[9 0 8 7;8 0 5 4;9 8 6 0;1 2 0 10];
-urm=irm';
 
 irm=urm';
 bin_urm=logical(urm);
